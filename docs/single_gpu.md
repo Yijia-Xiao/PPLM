@@ -4,7 +4,7 @@ To run fine-tuning on a single GPU, we will  make use of two packages
 
 1- [PEFT](https://huggingface.co/blog/peft) methods and in specific using HuggingFace [PEFT](https://github.com/huggingface/peft)library.
 
-2- [BitandBytes](https://github.com/TimDettmers/bitsandbytes) int8 quantization.
+2- [bitsandbytes](https://github.com/TimDettmers/bitsandbytes) int8 quantization.
 
 Given combination of PEFT and Int8 quantization, we would be able to fine_tune a Llama 2 7B model on one consumer grade GPU such as A10.
 
@@ -21,7 +21,7 @@ pip install -r requirements.txt
 
 ## How to run it?
 
-Get access to a machine with one GPU or if using a multi-GPU macine please make sure to only make one of them visible using `export CUDA_VISIBLE_DEVICES=GPU:id` and run the following. It runs by default with `samsum_dataset` for summarization application.
+Get access to a machine with one GPU or if using a multi-GPU machine please make sure to only make one of them visible using `export CUDA_VISIBLE_DEVICES=GPU:id` and run the following. It runs by default with `samsum_dataset` for summarization application.
 
 
 ```bash
@@ -82,6 +82,7 @@ model_name: str="PATH/to/LLAMA 2/7B"
 enable_fsdp: bool= False
 run_validation: bool=True
 batch_size_training: int=4
+gradient_accumulation_steps: int=1
 num_epochs: int=3
 num_workers_dataloader: int=2
 lr: float=2e-4
@@ -91,7 +92,6 @@ use_fp16: bool=False
 mixed_precision: bool=True
 val_batch_size: int=4
 dataset = "samsum_dataset" # alpaca_dataset,grammar_dataset
-micro_batch_size: int=1
 peft_method: str = "lora" # None , llama_adapter, prefix
 use_peft: bool=False
 output_dir: str = "./ft-output"
