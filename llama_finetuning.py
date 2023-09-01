@@ -127,6 +127,12 @@ def main(**kwargs):
                 "pad_token": "<PAD>",
             }
         )
+    pt_tokens = ["{{ORGANIZATION}}", "{{NAME}}", "{{EMAIL}}", "{{DATE_OF_BIRTH}}", "{{ADDRESS}}"]
+    # ['{{VEHICLE_LICENCE_PLATE}}', '{{ADDRESS}}', '{{LOCATION}}', '{{NAME}}', '{{DATE_OF_BIRTH}}', '{{PHONE}}', '{{ORGANIZATION}}', '{{TAGGED}}', '{{CREDIT_CARD}}', '{{TWITTER}}', '{{CREDENTIAL}}', '{{EMAIL}}', '{{DRIVERS_LICENCE}}', '{{SKYPE}}', '{{UNKNOWN}}', '{{URL}}', '{{NATIONAL_INSURANCE_NUMBER}}', '{{TAX_REFERENCE_NUMBER}}', '{{SOCIAL_SECURITY_NUMBER}}']
+    print(model.config.vocab_size)
+    # tokenizer.add_tokens(pt_tokens)
+    # model.resize_token_embeddings(model.config.vocab_size + len(pt_tokens))
+
     if train_config.use_peft:
         peft_config = generate_peft_config(train_config, kwargs)
         model = get_peft_model(model, peft_config)
@@ -158,6 +164,8 @@ def main(**kwargs):
         model.to("cuda")
 
     dataset_config = generate_dataset_config(train_config, kwargs)
+    dataset_config.subset = train_config.subset
+    print(train_config.config_json())
 
      # Load and preprocess the dataset for training and validation
     dataset_train = get_preprocessed_dataset(

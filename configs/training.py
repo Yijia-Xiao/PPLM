@@ -2,6 +2,7 @@
 # This software may be used and distributed according to the terms of the Llama 2 Community License Agreement.
 from dataclasses import dataclass
 from typing import ClassVar
+from dataclasses import fields
 
 
 @dataclass
@@ -34,7 +35,17 @@ class train_config:
     dist_checkpoint_folder: str="fine-tuned" # will be used if using FSDP
     save_optimizer: bool=False # will be used if using FSDP
     use_fast_kernels: bool = False # Enable using SDPA from PyTroch Accelerated Transformers, make use Flash Attention and Xformer memory-efficient kernels
+    subset: str = "medical_flashcards"
 
+    @classmethod
+    def config_json(cls):
+        config_dict = dict()
+        # Update the dictionary with the modified values
+        for field in fields(train_config):
+            field_name = field.name
+            field_value = getattr(train_config, field_name)
+            config_dict[field_name] = field_value
+        return config_dict
     
     
     
