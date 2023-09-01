@@ -40,3 +40,10 @@ class mask_dataset:
     dataset: str = "mask_dataset"
     train_split: str = "train"
     test_split: str = "val"
+
+
+@dataclass
+class instruct_dataset:
+    dataset: str = "instruct_dataset"
+    train_split: str = "train"
+    test_split: str = "val"

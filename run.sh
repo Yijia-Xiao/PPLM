@@ -7,7 +7,7 @@ P=64
 SUBSET=medical_flashcards
 # mediqa usmle_self_assessment mmmlu medical_flashcards wikidoc_patient_information wikidoc pubmed_causal medqa health_advice cord19;
 
-for TASK in mask original;
+for TASK in instruct; # mask original;
 do
     LOCA=$SIZE-$TASK-$SUBSET
     mkdir -p ckpt/$LOCA

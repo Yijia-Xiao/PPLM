@@ -14,6 +14,7 @@ from typing import List
 from datasets import load_dataset
 
 
+
 PROMPT_DICT = {
     "prompt_input": (
         "Below is an instruction that describes a task, paired with an input that provides further context. "
@@ -24,6 +25,14 @@ PROMPT_DICT = {
         "Below is an instruction that describes a task. "
         "Write a response that appropriately completes the request.\n\n"
         "### Instruction:\n{instruction}\n\n### Response:\n"
+    ),
+    "instruct_tuning": (
+        "Below is a question and related responses. "
+        "Write \n(1) a response answering the question. \n(2) a privecy protection version of the response. \n\n"
+        "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
+    ),
+    "instruct_output": (
+        "(1) a response answering the question: {output}\n(2) a privecy protection version of the response: {cleaned_output}\n"
     ),
 }
 
@@ -171,3 +180,83 @@ class MaskDataset(Dataset):
             "prompt_text": prompt_text,
             "output_text": append # ann[self.output_flag]
         }
+
+
+class InstructDataset(Dataset):
+    def __init__(self, dataset_config, tokenizer, partition="train", max_words=30):
+        subset = dataset_config.subset
+
+        dataset_hf = f'pii-{subset}'
+        self.ann = load_dataset(f'Yijia-Xiao/{dataset_hf}', split='train').to_list()
+
+        num_train = int(0.85 * len(self.ann))
+        if partition == "train":
+            self.ann = self.ann[: num_train]
+        else:
+            self.ann = self.ann[num_train: ]
+
+        self.max_words = max_words
+        self.tokenizer = tokenizer
+
+    def __len__(self):
+        return len(self.ann)
+
+    def __getitem__(self, index):
+        IGNORE_INDEX = -100  # The default setting in CrossEntropyLoss
+
+
+        ann = self.ann[index]
+        prompt = PROMPT_DICT["instruct_tuning"].format_map(ann)
+        # if ann.get("input", "") == "":
+        #     prompt = PROMPT_DICT["prompt_no_input"].format_map(ann)
+        # else:
+        #     prompt = PROMPT_DICT["prompt_input"].format_map(ann)
+
+        output = PROMPT_DICT["instruct_output"].format_map(ann)
+        example = prompt + output # ann[self.output_flag]
+        prompt_text = prompt
+
+        prompt = torch.tensor(
+            self.tokenizer.encode(prompt), dtype=torch.int64
+        )
+        example = self.tokenizer.encode(example)
+        example.append(self.tokenizer.eos_token_id)
+        example = torch.tensor(
+            example, dtype=torch.int64
+        )
+        padding = self.max_words - example.shape[0]
+        if padding > 0:
+            example = torch.cat((example, torch.zeros(padding, dtype=torch.int64) - 1))
+        elif padding < 0:
+            example = example[: self.max_words]
+        labels = copy.deepcopy(example)
+        labels[: len(prompt)] = -1
+        example_mask = example.ge(0)
+        label_mask = labels.ge(0)
+        example[~example_mask] = 0
+        labels[~label_mask] = IGNORE_INDEX
+        example_mask = example_mask.float()
+        label_mask = label_mask.float()
+
+        return {
+            "input_ids": example,
+            "labels": labels,
+            "attention_mask": example_mask,
+            "prompt_text": prompt_text,
+            "output_text": output # ann[self.output_flag]
+        }
+
+# # Example
+# Below is a question and related responses. Write 
+# (1) a response answering the question. 
+# (2) a privecy protection version of the response. 
+
+# ### Instruction:
+# Answer this question truthfully
+
+# ### Input:
+# What does low Mobility and bulging of TM suggest?
+
+# ### Response:
+# (1) a response answering the question: Low Mobility and bulging of TM is suggestive of Acute otitis media.
+# (2) a privecy protection version of the response: Low Mobility and bulging of TM is suggestive of {{ORGANIZATION}} otitis media.
