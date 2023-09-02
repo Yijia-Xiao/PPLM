@@ -26,13 +26,21 @@ PROMPT_DICT = {
         "Write a response that appropriately completes the request.\n\n"
         "### Instruction:\n{instruction}\n\n### Response:\n"
     ),
-    "instruct_tuning": (
+    "instruct_tuning_default": (
         "Below is a question and related responses. "
         "Write \n(1) a response answering the question. \n(2) a privecy protection version of the response. \n\n"
         "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
     ),
-    "instruct_output": (
+    "instruct_output_default": (
         "(1) a response answering the question: {output}\n(2) a privecy protection version of the response: {cleaned_output}\n"
+    ),
+    "instruct_tuning_contrast": (
+        "Below is a question and related responses: a desired one and an undesired one. The undesired and desired examples will not be given during inference.\n\n"
+        "### Instruction:\n{instruction}.\n\n### Input:\n{input}\n"
+        "(1) Undesired one: {output} \n(2) Desired one: {cleaned_output} \n\n### Response:\n"
+    ),
+    "instruct_output_contrast": (
+        "{output}"
     ),
 }
 
@@ -40,6 +48,7 @@ PROMPT_DICT = {
 class OriginalDataset(Dataset):
     def __init__(self, dataset_config, tokenizer, partition="train", max_words=30):
         subset = dataset_config.subset
+        max_words = dataset_config.maxlen
 
         self.output_flag = 'output' # 'cleaned_output' if dataset_config.cleaned else 'output'
         dataset_hf = f'pii-{subset}'
@@ -104,6 +113,7 @@ class OriginalDataset(Dataset):
 class MaskDataset(Dataset):
     def __init__(self, dataset_config, tokenizer, partition="train", max_words=30):
         subset = dataset_config.subset
+        max_words = dataset_config.maxlen
 
         self.output_flag = 'cleaned_output'
         dataset_hf = f'pii-{subset}'
@@ -185,6 +195,7 @@ class MaskDataset(Dataset):
 class InstructDataset(Dataset):
     def __init__(self, dataset_config, tokenizer, partition="train", max_words=30):
         subset = dataset_config.subset
+        max_words = dataset_config.maxlen
 
         dataset_hf = f'pii-{subset}'
         self.ann = load_dataset(f'Yijia-Xiao/{dataset_hf}', split='train').to_list()
@@ -197,6 +208,7 @@ class InstructDataset(Dataset):
 
         self.max_words = max_words
         self.tokenizer = tokenizer
+        self.strategy = dataset_config.inst_strategy
 
     def __len__(self):
         return len(self.ann)
@@ -206,13 +218,16 @@ class InstructDataset(Dataset):
 
 
         ann = self.ann[index]
-        prompt = PROMPT_DICT["instruct_tuning"].format_map(ann)
+        tuning_key = f'instruct_tuning_{self.strategy}'
+        output_key = f'instruct_output_{self.strategy}'
+
+        prompt = PROMPT_DICT[tuning_key].format_map(ann)
         # if ann.get("input", "") == "":
         #     prompt = PROMPT_DICT["prompt_no_input"].format_map(ann)
         # else:
         #     prompt = PROMPT_DICT["prompt_input"].format_map(ann)
 
-        output = PROMPT_DICT["instruct_output"].format_map(ann)
+        output = PROMPT_DICT[output_key].format_map(ann)
         example = prompt + output # ann[self.output_flag]
         prompt_text = prompt
 

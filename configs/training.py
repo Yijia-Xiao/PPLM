@@ -36,6 +36,8 @@ class train_config:
     save_optimizer: bool=False # will be used if using FSDP
     use_fast_kernels: bool = False # Enable using SDPA from PyTroch Accelerated Transformers, make use Flash Attention and Xformer memory-efficient kernels
     subset: str = "medical_flashcards"
+    maxlen: int = 512
+    inst_strategy: str = "default"
 
     @classmethod
     def config_json(cls):

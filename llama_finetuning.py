@@ -2,6 +2,7 @@
 # This software may be used and distributed according to the terms of the Llama 2 Community License Agreement.
 
 import os
+import json
 
 import fire
 import torch
@@ -162,7 +163,10 @@ def main(**kwargs):
 
     dataset_config = generate_dataset_config(train_config, kwargs)
     dataset_config.subset = train_config.subset
+    dataset_config.maxlen = train_config.maxlen
+    dataset_config.inst_strategy = train_config.inst_strategy
     print(train_config.config_json())
+    json.dump(train_config.config_json(), open(f'{train_config.output_dir}/config.json', 'w'))
 
      # Load and preprocess the dataset for training and validation
     dataset_train = get_preprocessed_dataset(
