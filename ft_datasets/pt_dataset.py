@@ -12,7 +12,7 @@ from sentencepiece import SentencePieceProcessor
 from torch.utils.data import Dataset
 from typing import List
 from datasets import load_dataset
-from template import PROMPT_DICT
+from ft_datasets.template import PROMPT_DICT
 
 
 class OriginalDataset(Dataset):

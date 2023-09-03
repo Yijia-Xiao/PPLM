@@ -9,12 +9,12 @@ PROMPT_DICT = {
         "Write a response that appropriately completes the request.\n\n"
         "### Instruction:\n{instruction}\n\n### Response:\n"
     ),
-    "instruct_tuning_default": (
+    "instruct_tuning_instruct": (
         "Below is a question and related responses. "
         "Write \n(1) a response answering the question. \n(2) a privecy protection version of the response. \n\n"
         "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
     ),
-    "instruct_output_default": (
+    "instruct_output_instruct": (
         "(1) a response answering the question: {output}\n(2) a privecy protection version of the response: {cleaned_output}\n"
     ),
     "instruct_tuning_contrast": (
