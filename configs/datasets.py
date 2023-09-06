@@ -36,6 +36,13 @@ class original_dataset:
 
 
 @dataclass
+class remove_dataset:
+    dataset: str = "remove_dataset"
+    train_split: str = "train"
+    test_split: str = "val"
+
+
+@dataclass
 class mask_dataset:
     dataset: str = "mask_dataset"
     train_split: str = "train"
