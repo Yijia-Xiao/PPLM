@@ -49,6 +49,8 @@ from utils.train_utils import (
 def main(**kwargs):
     # Update the configuration for the training and sharding process
     update_config((train_config, fsdp_config), **kwargs)
+    if train_config.custom_loss == "penalty":
+        from utils.models import CustomLlamaForCausalLM as LlamaForCausalLM
 
     # Set the seeds for reproducibility
     torch.cuda.manual_seed(train_config.seed)

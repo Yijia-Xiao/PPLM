@@ -38,6 +38,7 @@ class train_config:
     subset: str = "medical_flashcards"
     maxlen: int = 512
     inst_strategy: str = "default"
+    custom_loss: str = "penalty"
 
     @classmethod
     def config_json(cls):
