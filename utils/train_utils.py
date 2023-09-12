@@ -6,6 +6,7 @@ import sys
 from typing import List
 import yaml
 import time
+import wandb
 
 import fire
 import torch
@@ -92,6 +93,7 @@ def train(model, train_dataloader,eval_dataloader, tokenizer, optimizer, lr_sche
                     else:
                         batch[key] = batch[key].to('cuda:0')              
                 loss = model(**batch).loss
+                wandb.log({"Loss": loss.item()})
                 loss = loss / gradient_accumulation_steps
                 total_loss += loss.detach().float()
                 if train_config.use_fp16:

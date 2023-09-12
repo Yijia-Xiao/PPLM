@@ -8,6 +8,7 @@ import fire
 import torch
 import torch.distributed as dist
 import torch.optim as optim
+import wandb
 from peft import get_peft_model, prepare_model_for_int8_training
 from pkg_resources import packaging
 from torch.distributed.fsdp import (
@@ -55,6 +56,14 @@ def main(**kwargs):
     # Set the seeds for reproducibility
     torch.cuda.manual_seed(train_config.seed)
     torch.manual_seed(train_config.seed)
+
+    # We initialize at a much later point so that we won't create lots of meaningless wandb loggings
+    run_name = os.path.basename(kwargs['output_dir'].strip('/'))
+    group_name = kwargs['subset']
+    tags = [kwargs[k] for k in ['dataset', 'subset']]
+    wandb.init(name=run_name, group=group_name, config=kwargs,
+               tags=tags,
+               notes=os.environ.get('SLURM_JOB_ID', 'local'))
 
     if train_config.enable_fsdp:
         setup()
