@@ -21,7 +21,7 @@ done
 # python inference/inference.py --model_name ckpt/merge/7B-instruct-medical_flashcards/ --prompt_file inference/examples/default.txt
 # Below is a question and related responses. Write 
 # (1) a response answering the question. 
-# (2) a privecy protection version of the response. 
+# (2) a privacy protection version of the response. 
 
 # ### Instruction:
 # Answer this question truthfully
@@ -32,7 +32,7 @@ done
 # ### Response:
 
 # (1) a response answering the question: No, clasp knife spasticity is not a common presentation of upper motor neuron (UMN) lesions. Clasp knife spasticity is a type of hyperreflexia that involves sudden and exaggerated, jerky movements, often involving the fingers or other distal muscles of the affected limb. It is characterized by a brief, abrupt increase in muscle tone that is followed by a rapid, jerking movement. Clasp knife spasticity is often caused by UMN lesions in the primary motor cortex, but it can also be caused by other types of brain damage or injury. In contrast, upper extremity hyperreflexia may be more common in UMN lesions, but not always in the form of clasp knife spasticity.
-# (2) a privecy protection version of the response: No, clasp knife spasticity is not a common presentation of upper motor neuron ({{ORGANIZATION}}) lesions. Clasp knife spasticity is a type of hyperreflexia that involves sudden and exaggerated, jerky movements, often involving the fingers or other distal muscles of the affected limb. It is characterized by a brief, abrupt increase in muscle tone that is followed by a rapid, jerking movement. Clasp knife spasticity is often caused by {{ORGANIZATION}} lesions in the primary motor cortex, but it can also be caused by other types of brain damage or injury. In contrast, upper extremity hyperreflexia may be more common in {{ORGANIZATION}} lesions, but not always in the form of clasp knife spasticity.
+# (2) a privacy protection version of the response: No, clasp knife spasticity is not a common presentation of upper motor neuron ({{ORGANIZATION}}) lesions. Clasp knife spasticity is a type of hyperreflexia that involves sudden and exaggerated, jerky movements, often involving the fingers or other distal muscles of the affected limb. It is characterized by a brief, abrupt increase in muscle tone that is followed by a rapid, jerking movement. Clasp knife spasticity is often caused by {{ORGANIZATION}} lesions in the primary motor cortex, but it can also be caused by other types of brain damage or injury. In contrast, upper extremity hyperreflexia may be more common in {{ORGANIZATION}} lesions, but not always in the form of clasp knife spasticity.
 
 
 

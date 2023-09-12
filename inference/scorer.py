@@ -438,10 +438,10 @@ class PIIScorer(Scorer):
         """
 
         self.scrubber = scrubadub.Scrubber()
-        self.scrubber.add_detector(DateOfBirthDetectorNonNan)
-        self.scrubber.add_detector(scrubadub.detectors.SkypeDetector)
+        # self.scrubber.add_detector(DateOfBirthDetectorNonNan)
+        # self.scrubber.add_detector(scrubadub.detectors.SkypeDetector)
         self.scrubber.add_detector(scrubadub_spacy.detectors.SpacyEntityDetector(model='en_core_web_sm'))
-        self.scrubber.add_detector(AddressDetectorNoLibpostal)
+        # self.scrubber.add_detector(AddressDetectorNoLibpostal)
 
     def clean_text(self, text: str) -> float:
         """

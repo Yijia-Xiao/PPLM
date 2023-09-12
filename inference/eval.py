@@ -78,7 +78,7 @@ for orig_label, cleaned_label, prediction_dict in tqdm.tqdm(zip(data_orig_labels
     if strategy == 'instruct' or strategy == 'contrast':
         if strategy == 'instruct':
             hint1 = "(1) a response answering the question: "
-            hint2 = "(2) a privecy protection version of the response: "
+            hint2 = "(2) a privacy protection version of the response: "
             plain = pred_text.split(hint1)[-1].split(hint2)[0].strip()
             protected = pred_text.split(hint2)[-1].strip()
         elif strategy == 'contrast':

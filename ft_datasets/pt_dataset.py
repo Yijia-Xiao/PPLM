@@ -308,7 +308,7 @@ class InstructDataset(Dataset):
 # # Example
 # Below is a question and related responses. Write 
 # (1) a response answering the question. 
-# (2) a privecy protection version of the response. 
+# (2) a privacy protection version of the response. 
 
 # ### Instruction:
 # Answer this question truthfully
@@ -318,4 +318,4 @@ class InstructDataset(Dataset):
 
 # ### Response:
 # (1) a response answering the question: Low Mobility and bulging of TM is suggestive of Acute otitis media.
-# (2) a privecy protection version of the response: Low Mobility and bulging of TM is suggestive of {{ORGANIZATION}} otitis media.
+# (2) a privacy protection version of the response: Low Mobility and bulging of TM is suggestive of {{ORGANIZATION}} otitis media.
