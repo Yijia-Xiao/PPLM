@@ -36,4 +36,20 @@ PROMPT_DICT = {
     "instruct_output_contrast": (
         "(1) desired answer to the question: {output}\n(2) undesired answer to the question: {cleaned_output}\n"
     ),
+    "instruct_tuning_instruct_rev": (
+        "Below is a question and related responses. "
+        "Write \n(1) a privacy protection version of the response. \n(2) a response answering the question. \n\n"
+        "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
+    ),
+    "instruct_output_instruct_rev": (
+        "(1) a privacy protection version of the response: {output}\n(2) a response answering the question: {cleaned_output}\n"
+    ),
+    "instruct_tuning_contrast_rev": (
+        "Below is a question and related responses. "
+        "Write \n(1) undesired answer to the question. \n(2) desired answer to the question. \n\n"
+        "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
+    ),
+    "instruct_output_contrast_rev": (
+        "(1) undesired answer to the question: {output}\n(2) desired answer to the question: {cleaned_output}\n"
+    ),
 }

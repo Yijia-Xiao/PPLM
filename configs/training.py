@@ -37,7 +37,7 @@ class train_config:
     use_fast_kernels: bool = False # Enable using SDPA from PyTroch Accelerated Transformers, make use Flash Attention and Xformer memory-efficient kernels
     subset: str = "medical_flashcards"
     maxlen: int = 512
-    inst_strategy: str = "default"
+    inst_strategy: str = None
     custom_loss: str = "penalty"
 
     @classmethod

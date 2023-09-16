@@ -8,9 +8,7 @@ EP=5
 BS=64
 ML=384
 
-: << experiment_1
-# mediqa usmle_self_assessment mmmlu medical_flashcards wikidoc_patient_information wikidoc pubmed_causal medqa health_advice cord19;
-for SUBSET in wikidoc_patient_information; # cord19; # medical_flashcards; # wikidoc;
+for SUBSET in wikidoc_patient_information medical_flashcards wikidoc;
 do
     if [ "$SUBSET" = "cord19" ]; then
         EP=3
@@ -33,7 +31,7 @@ do
     done
 done
 
-for SUBSET in wikidoc_patient_information; # cord19; # medical_flashcards; # wikidoc;
+for SUBSET in wikidoc_patient_information medical_flashcards wikidoc;
 do
     if [ "$SUBSET" = "cord19" ]; then
         EP=3
@@ -56,7 +54,7 @@ do
 done
 experiment_1
 
-: << experiment_2
+
 for SUBSET in medical_flashcards; # wikidoc;
 do
     for TASK in remove;
@@ -74,9 +72,9 @@ do
         python inference/hf-text-generation-inference/merge_lora_weights.py --base_model models_hf/7B --peft_model ckpt/$LOCA/ --output_dir ckpt/merge/$LOCA/
     done
 done
-experiment_2
 
 
+<< loss
 for SUBSET in medical_flashcards wikidoc;
 do
     for TASK in loss;
@@ -94,3 +92,4 @@ do
         python inference/hf-text-generation-inference/merge_lora_weights.py --base_model models_hf/7B --peft_model ckpt/$LOCA/ --output_dir ckpt/merge/$LOCA/
     done
 done
+loss

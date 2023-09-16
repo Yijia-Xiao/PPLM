@@ -503,4 +503,6 @@ if __name__ == '__main__':
     parser.add_argument('--proc', type=int, default=64)
     args = parser.parse_args()
     score_pii(args.dataset, num_proc=args.proc)
+    for dataset in ["mediqa", "mmmlu", "medical_flashcards", "wikidoc_patient_information", "wikidoc", "pubmed_causal", "medqa", "health_advice", "cord19"]:
+        score_pii(dataset, num_proc=args.proc)
 """
