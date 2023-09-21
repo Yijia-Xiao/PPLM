@@ -9,8 +9,16 @@ PROMPT_DICT = {
         "Write a response that appropriately completes the request.\n\n"
         "### Instruction:\n{instruction}\n\n### Response:\n"
     ),
-    "instruct_tuning_instruct": (
+    "instruct_tuning_command": (
         "Below is a question and related responses. "
+        "Write a privacy protection response to the question. Sensitive information in the response should be replaced by <unk>. \n\n"
+        "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
+    ),
+    "instruct_output_command": (
+        "{cleaned_output}"
+    ),
+    "instruct_tuning_instruct": (
+        "Below is a question and related responses. Sensitive information in the response should be replaced by <unk>."
         "Write \n(1) a response answering the question. \n(2) a privacy protection version of the response. \n\n"
         "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
     ),
@@ -29,7 +37,7 @@ PROMPT_DICT = {
     # Above version deprecated.
     # Aligning prompts between training and evaluation of contrast strategy.
     "instruct_tuning_contrast": (
-        "Below is a question and related responses. "
+        "Below is a question and related responses. Sensitive information in the response should be replaced by <unk>."
         "Write \n(1) desired answer to the question. \n(2) undesired answer to the question. \n\n"
         "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
     ),
@@ -37,7 +45,7 @@ PROMPT_DICT = {
         "(1) desired answer to the question: {output}\n(2) undesired answer to the question: {cleaned_output}\n"
     ),
     "instruct_tuning_instruct_rev": (
-        "Below is a question and related responses. "
+        "Below is a question and related responses. Sensitive information in the response should be replaced by <unk>."
         "Write \n(1) a privacy protection version of the response. \n(2) a response answering the question. \n\n"
         "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
     ),
@@ -45,7 +53,7 @@ PROMPT_DICT = {
         "(1) a privacy protection version of the response: {output}\n(2) a response answering the question: {cleaned_output}\n"
     ),
     "instruct_tuning_contrast_rev": (
-        "Below is a question and related responses. "
+        "Below is a question and related responses. Sensitive information in the response should be replaced by <unk>."
         "Write \n(1) undesired answer to the question. \n(2) desired answer to the question. \n\n"
         "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
     ),

@@ -253,6 +253,7 @@ class InstructDataset(Dataset):
         self.max_words = max_words
         self.tokenizer = tokenizer
         self.strategy = dataset_config.inst_strategy
+        self.pt_tokens = ["{{ORGANIZATION}}", "{{NAME}}", "{{EMAIL}}", "{{DATE_OF_BIRTH}}", "{{ADDRESS}}"]
 
     def __len__(self):
         return len(self.ann)
@@ -272,6 +273,11 @@ class InstructDataset(Dataset):
         #     prompt = PROMPT_DICT["prompt_input"].format_map(ann)
 
         output = PROMPT_DICT[output_key].format_map(ann)
+
+        # Loop through the tokens and replace them in the input string
+        for token in self.pt_tokens:
+            output = output.replace(token, '<unk>')
+
         example = prompt + output # ann[self.output_flag]
         prompt_text = prompt
 

@@ -20,19 +20,20 @@ class Generator(object):
         for i in range(len(self.ann)):
             if self.task == 'original' or self.task == 'mask' or self.task == 'remove' or self.task == 'loss': # share prompt
                 example = PROMPT_DICT['prompt_input'].format_map(self.ann[i])
-            elif self.task == 'instruct':
-                example = PROMPT_DICT['instruct_tuning_instruct'].format_map(self.ann[i])
-            elif self.task == 'contrast':
-                example = PROMPT_DICT['instruct_tuning_contrast'].format_map(self.ann[i])
+            else:
+                example = PROMPT_DICT[f'instruct_tuning_{self.task}'].format_map(self.ann[i])
             example_list.append(example)
 
         json.dump(example_list, open(f'{self.output_path}/{self.subset}-{self.task}.json', 'w'))
 
 
-for generator in [Generator('medical_flashcards'), Generator('wikidoc')]:
+for generator in [Generator('medical_flashcards'), Generator('wikidoc'), Generator('wikidoc_patient_information')]:
     generator.generate(task='original')
     generator.generate(task='mask')
+    generator.generate(task='command')
     generator.generate(task='instruct')
     generator.generate(task='contrast')
+    generator.generate(task='instruct_rev')
+    generator.generate(task='contrast_rev')
     generator.generate(task='remove')
     generator.generate(task='loss')

@@ -25,19 +25,38 @@ def analyze(data):
     for schema_key in results.keys():
         results[schema_key] = [round(v / num_samples, 4) for v in results[schema_key]]
 
-    print(results)
+    res = dict()
+    for k, v in results.items():
+        if k == 'protect_orig' or k == 'protect_cleaned':
+            if k == 'protect_orig':
+                res['orig'] = v
+            else:
+                res['cleaned'] = v
+        elif k == 'plain_orig' or k == 'plain_cleaned':
+            if k == 'plain_orig':
+                res['orig'] = v
+            else:
+                res['cleaned'] = v
+        else:
+            if k == 'priv_protected_score' or k == 'priv_score':
+                res['priv_score'] = v
+            # elif k == 'priv_protected_score':
+            #     res['priv_score'] = v
+    
+    # print(results)
+    print(res)
 
 
 
-files = "medical_flashcards-contrast-res.json  medical_flashcards-mask-res.json      wikidoc-contrast-res.json  wikidoc-mask-res.json  medical_flashcards-instruct-res.json  medical_flashcards-original-res.json  wikidoc-instruct-res.json  wikidoc-original-res.json"
-for subset in ["medical_flashcards", "wikidoc"]:
-    for stgy in ["original", "mask", "remove", "loss", "instruct", "contrast"]:
-        f = f"./examples/results/{subset}-{stgy}-res.json"
-        data = json.load(open(f, 'r'))
-        print(f'SUBSET={subset}. STRATEGY={stgy}.')
-        analyze(data)
-
-
+# files = "medical_flashcards-contrast-res.json  medical_flashcards-mask-res.json      wikidoc-contrast-res.json  wikidoc-mask-res.json  medical_flashcards-instruct-res.json  medical_flashcards-original-res.json  wikidoc-instruct-res.json  wikidoc-original-res.json"
+for subset in ["medical_flashcards", "wikidoc", "wikidoc_patient_information"]:
+    for scale in ['7B', '13B']:
+        for stgy in ["original", "mask", "remove", "command", "instruct", "contrast", "instruct_rev", "contrast_rev"]:
+            f = f"./examples/results/{subset}-{stgy}-{scale}.json"
+            data = json.load(open(f, 'r'))
+            print(f'SUBSET={subset}. STRATEGY={stgy}. SCALE={scale}.')
+            analyze(data)
+        print()
 
 # SUBSET=medical_flashcards. STRATEGY=original.
 # {'plain_orig': [0.4634, 0.3109, 0.394, 0.9002], 'plain_cleaned': [0.4488, 0.2934, 0.3806, 0.8903], 'priv_score': [0.0224]}

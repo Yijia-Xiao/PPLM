@@ -12,12 +12,14 @@ parser = argparse.ArgumentParser(description="Calculate ROUGE and BERT_scores fo
 
 # Add arguments for dataset and strategy
 parser.add_argument("--subset", required=True, help="Subset: medical_flashcards, wikidoc, etc.")
-parser.add_argument("--strategy", required=True, choices=["original", "mask", "instruct", "contrast", 'remove', 'loss'], help="Select the ft strategy.")
+parser.add_argument("--strategy", required=True, help="Select the ft strategy.")
+parser.add_argument("--scale", required=True, help="Model scale (7B, 13B).")
 
 # Parse the command-line arguments
 args = parser.parse_args()
 subset = args.subset
 strategy = args.strategy
+scale = args.scale
 
 # Define the lists of labels and predictions
 dataset_hf = f'pii-{subset}'
@@ -28,12 +30,28 @@ data_labels = ann[num_train: ]
 data_orig_labels = [sample['output'] for sample in data_labels]
 data_cleaned_labels = [sample['cleaned_output'] for sample in data_labels]
 
+import re
+pt_tokens = ["{{ORGANIZATION}}", "{{NAME}}", "{{EMAIL}}", "{{DATE_OF_BIRTH}}", "{{ADDRESS}}"]
+# Create a regular expression pattern for all tokens
+pattern = re.compile("|".join(map(re.escape, pt_tokens)))
+
+def single_string_replace(s):
+    return pattern.sub('<unk>', s)
+
+# Applying the transformation using map function
+mapped_transformed_strings = list(map(single_string_replace, data_cleaned_labels))
+mapped_transformed_strings
+
+# print(data_cleaned_labels[: 10])
+# print(mapped_transformed_strings[: 10])
+data_cleaned_labels = mapped_transformed_strings
+
 # # Example of data_preds
 # data_preds = [
 #     [{'generated_text': 'Prediction 1'}],
 #     [{'generated_text': 'Prediction 2'}],
 # ]
-data_preds = json.load(open(f'./examples/prediction/gen-{subset}-{strategy}.json', 'r'))
+data_preds = json.load(open(f'./examples/prediction/gen-{subset}-{strategy}-{scale}.json', 'r'))
 
 # def calc(prediction, label):
 #     # Calculate ROUGE scores
@@ -75,19 +93,27 @@ text_scorer = TextScorer()
 for orig_label, cleaned_label, prediction_dict in tqdm.tqdm(zip(data_orig_labels, data_cleaned_labels, data_preds)):
     pred_text = prediction_dict[0]['generated_text']
 
-    if strategy == 'instruct' or strategy == 'contrast':
+    if strategy == 'instruct' or strategy == 'contrast' or strategy == 'instruct_rev' or strategy == 'contrast_rev':
         if strategy == 'instruct':
-            hint1 = "(1) a response answering the question: "
-            hint2 = "(2) a privacy protection version of the response: "
+            hint1 = "(1) a response answering the question:"
+            hint2 = "(2) a privacy protection version of the response:"
             plain = pred_text.split(hint1)[-1].split(hint2)[0].strip()
             protected = pred_text.split(hint2)[-1].strip()
         elif strategy == 'contrast':
-            hint1 = "(1) desired answer to the question: "
-            hint2 = "(2) undesired answer to the question: "
+            hint1 = "(1) desired answer to the question:"
+            hint2 = "(2) undesired answer to the question:"
             protected = pred_text.split(hint1)[-1].split(hint2)[0].strip()
             plain = pred_text.split(hint2)[-1].strip()
-        if plain == "" or protected == "" or orig_label == "" or cleaned_label == "":
-            print(plain, protected, orig_label, cleaned_label)
+        elif strategy == 'instruct_rev':
+            hint1 = "(1) a privacy protection version of the response:"
+            hint2 = "(2) a response answering the question:"
+            protected = pred_text.split(hint1)[-1].split(hint2)[0].strip()
+            plain = pred_text.split(hint2)[-1].strip()
+        elif strategy == 'contrast_rev':
+            hint1 = "(1) undesired answer to the question:"
+            hint2 = "(2) desired answer to the question:"
+            plain = pred_text.split(hint1)[-1].split(hint2)[0].strip()
+            protected = pred_text.split(hint2)[-1].strip()
 
         # plain_scores = calc(plain, orig_label)
         # protected_scores = calc(protected, orig_label)
@@ -128,4 +154,4 @@ for orig_label, cleaned_label, prediction_dict in tqdm.tqdm(zip(data_orig_labels
         raise NotImplementedError
 
 
-json.dump(results, open(f'examples/results/{subset}-{strategy}-res.json', 'w'))
+json.dump(results, open(f'examples/results/{subset}-{strategy}-{scale}.json', 'w'))

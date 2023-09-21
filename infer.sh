@@ -1,8 +1,11 @@
-for D in medical_flashcards wikidoc;
+for D in "$@";
 do
-    for TPLT in remove loss; # contrast; # original contrast instruct; # mask
+    for TPLT in original mask remove command instruct contrast instruct_rev contrast_rev;
     do
-        python inference/pl.py --dataset $D --template $TPLT
+        for SCLE in 7B 13B;
+        do
+            python inference/pl.py --dataset $D --template $TPLT --scale $SCLE
+        done
     done
 done
 
