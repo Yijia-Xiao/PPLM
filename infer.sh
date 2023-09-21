@@ -1,4 +1,5 @@
-for D in "$@";
+# for D in "$@";
+for D in medical_flashcards wikidoc_patient_information wikidoc;
 do
     for TPLT in original mask remove command instruct contrast instruct_rev contrast_rev;
     do

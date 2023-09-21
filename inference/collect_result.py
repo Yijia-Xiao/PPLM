@@ -26,24 +26,28 @@ def analyze(data):
         results[schema_key] = [round(v / num_samples, 4) for v in results[schema_key]]
 
     res = dict()
-    for k, v in results.items():
-        if k == 'protect_orig' or k == 'protect_cleaned':
-            if k == 'protect_orig':
-                res['orig'] = v
+    if 'protect_orig' in results:
+        for k, v in results.items():
+            if k == 'protect_orig' or k == 'protect_cleaned':
+                if k == 'protect_orig':
+                    res['orig'] = v
+                else:
+                    res['cleaned'] = v
             else:
-                res['cleaned'] = v
-        elif k == 'plain_orig' or k == 'plain_cleaned':
-            if k == 'plain_orig':
-                res['orig'] = v
+                if k == 'priv_protected_score':
+                    res['priv_score'] = v
+
+    else:
+        for k, v in results.items():
+            if k == 'plain_orig' or k == 'plain_cleaned':
+                if k == 'plain_orig':
+                    res['orig'] = v
+                else:
+                    res['cleaned'] = v
             else:
-                res['cleaned'] = v
-        else:
-            if k == 'priv_protected_score' or k == 'priv_score':
-                res['priv_score'] = v
-            # elif k == 'priv_protected_score':
-            #     res['priv_score'] = v
-    
-    # print(results)
+                if k == 'priv_score':
+                    res['priv_score'] = v
+
     print(res)
 
 

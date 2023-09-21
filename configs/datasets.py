@@ -36,6 +36,13 @@ class original_dataset:
 
 
 @dataclass
+class qa_dataset:
+    dataset: str = "qa_dataset"
+    train_split: str = "train"
+    test_split: str = "val"
+
+
+@dataclass
 class remove_dataset:
     dataset: str = "remove_dataset"
     train_split: str = "train"

@@ -33,3 +33,8 @@ if __name__ == "__main__":
     print(tasks)
 
     main(tasks)
+
+    tasks = [f"python eval.py --subset {subset} --strategy {strategy} --scale {scale}" for strategy in strategies for scale in scales for subset in subsets]
+    print(tasks)
+
+    main(tasks)

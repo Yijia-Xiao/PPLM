@@ -9,6 +9,9 @@ PROMPT_DICT = {
         "Write a response that appropriately completes the request.\n\n"
         "### Instruction:\n{instruction}\n\n### Response:\n"
     ),
+    "question_answer": (
+        "### Question:\n{input}\n\n### Answer:\n"
+    ),
     "instruct_tuning_command": (
         "Below is a question and related responses. "
         "Write a privacy protection response to the question. Sensitive information in the response should be replaced by <unk>. \n\n"

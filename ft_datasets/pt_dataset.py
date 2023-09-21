@@ -79,6 +79,67 @@ class OriginalDataset(Dataset):
             "output_text": ann[self.output_flag]
         }
 
+class QADataset(Dataset):
+    def __init__(self, dataset_config, tokenizer, partition="train", max_words=30):
+        subset = dataset_config.subset
+        max_words = dataset_config.maxlen
+
+        self.output_flag = 'output' # 'cleaned_output' if dataset_config.cleaned else 'output'
+        dataset_hf = f'pii-{subset}'
+        self.ann = load_dataset(f'Yijia-Xiao/{dataset_hf}', split='train').to_list()
+
+        num_train = int(0.85 * len(self.ann))
+        if partition == "train":
+            self.ann = self.ann[: num_train]
+        else:
+            self.ann = self.ann[num_train: ]
+
+        self.max_words = max_words
+        self.tokenizer = tokenizer
+
+    def __len__(self):
+        return len(self.ann)
+
+    def __getitem__(self, index):
+        IGNORE_INDEX = -100  # The default setting in CrossEntropyLoss
+
+
+        ann = self.ann[index]
+        prompt = PROMPT_DICT["question_answer"].format_map(ann)
+
+        example = prompt + ann[self.output_flag] # ["output"]
+        prompt_text = prompt
+
+        prompt = torch.tensor(
+            self.tokenizer.encode(prompt), dtype=torch.int64
+        )
+        example = self.tokenizer.encode(example)
+        example.append(self.tokenizer.eos_token_id)
+        example = torch.tensor(
+            example, dtype=torch.int64
+        )
+        padding = self.max_words - example.shape[0]
+        if padding > 0:
+            example = torch.cat((example, torch.zeros(padding, dtype=torch.int64) - 1))
+        elif padding < 0:
+            example = example[: self.max_words]
+        labels = copy.deepcopy(example)
+        labels[: len(prompt)] = -1
+        example_mask = example.ge(0)
+        label_mask = labels.ge(0)
+        example[~example_mask] = 0
+        labels[~label_mask] = IGNORE_INDEX
+        example_mask = example_mask.float()
+        label_mask = label_mask.float()
+
+        return {
+            "input_ids": example,
+            "labels": labels,
+            "attention_mask": example_mask,
+            "prompt_text": prompt_text,
+            "output_text": ann[self.output_flag]
+        }
+
 
 class RemoveDataset(Dataset):
     def __init__(self, dataset_config, tokenizer, partition="train", max_words=30):
