@@ -20,6 +20,10 @@ class Generator(object):
         for i in range(len(self.ann)):
             if self.task == 'original' or self.task == 'mask' or self.task == 'remove' or self.task == 'loss': # share prompt
                 example = PROMPT_DICT['prompt_input'].format_map(self.ann[i])
+            elif self.task == 'qa':
+                example = PROMPT_DICT['question_answer'].format_map(self.ann[i])
+            elif self.task == 'dpo':
+                example = PROMPT_DICT['dpo'].format_map(self.ann[i])
             else:
                 example = PROMPT_DICT[f'instruct_tuning_{self.task}'].format_map(self.ann[i])
             example_list.append(example)
@@ -28,12 +32,14 @@ class Generator(object):
 
 
 for generator in [Generator('medical_flashcards'), Generator('wikidoc'), Generator('wikidoc_patient_information')]:
+    generator.generate(task='dpo')
     generator.generate(task='original')
+    generator.generate(task='remove')
     generator.generate(task='mask')
+    generator.generate(task='qa')
     generator.generate(task='command')
     generator.generate(task='instruct')
     generator.generate(task='contrast')
     generator.generate(task='instruct_rev')
     generator.generate(task='contrast_rev')
-    generator.generate(task='remove')
     generator.generate(task='loss')

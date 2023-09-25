@@ -251,7 +251,8 @@ class MaskDataset(Dataset):
 
         # Loop through the tokens and replace them in the input string
         for token in self.pt_tokens:
-            append = append.replace(token, '<unk>')
+            # output = output.replace(token, '<unk>')
+            append = append.replace(token, token[2: -2])
 
         example = prompt + append # ann[self.output_flag] # ["output"]
         prompt_text = prompt
@@ -337,7 +338,8 @@ class InstructDataset(Dataset):
 
         # Loop through the tokens and replace them in the input string
         for token in self.pt_tokens:
-            output = output.replace(token, '<unk>')
+            # output = output.replace(token, '<unk>')
+            output = output.replace(token, token[2: -2])
 
         example = prompt + output # ann[self.output_flag]
         prompt_text = prompt

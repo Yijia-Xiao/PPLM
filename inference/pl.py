@@ -19,19 +19,22 @@ parser.add_argument('--train_batch_size', type=int, default=64)
 parser.add_argument('--generate_batch_size', type=int, default=32)
 parser.add_argument('--max_new_tokens', type=int, default=384)
 parser.add_argument('--use_tqdm', action="store_true")
+parser.add_argument('--device', type=int, default=0)
 
 
 args = parser.parse_args()
 dataset_name = args.dataset # [wikidoc flashcards]
 template_name = args.template # [original instruct contrast]
 scale_name = args.scale # [original instruct contrast]
+device_name = args.device # [original instruct contrast]
 ML = 384
 
 
 model_dir = "/home/dsi/yxiao/plm/ckpt/merge"
+print('###', device_name, '###')
 
 generator = pipeline(task='text-generation', model=f"{model_dir}/{template_name}-{dataset_name}-{scale_name}-{args.max_new_tokens}-{args.train_batch_size}",
-                     device_map="auto", batch_size=args.generate_batch_size, max_new_tokens=args.max_new_tokens)
+                     device=device_name, batch_size=args.generate_batch_size, max_new_tokens=args.max_new_tokens, torch_dtype=torch.float16)
 
 generator.tokenizer.add_special_tokens({
         "pad_token": "<PAD>"
