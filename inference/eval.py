@@ -23,7 +23,7 @@ scale = args.scale
 
 # Define the lists of labels and predictions
 dataset_hf = f'pii-{subset}'
-ann = load_dataset(f'Yijia-Xiao/{dataset_hf}', split='train').to_list()
+ann = load_from_disk(f'./data/{dataset_hf}.hf').to_list()
 num_train = int(0.85 * len(ann))
 data_labels = ann[num_train: ]
 

@@ -93,3 +93,16 @@ do
     done
 done
 loss
+
+
+set -x
+for D in "$@";
+do
+    for TPLT in command instruct contrast instruct_rev contrast_rev; # dpo; # qa; # original mask remove command instruct contrast instruct_rev contrast_rev;
+    do
+        for SCLE in 7B 13B;
+        do
+            python inference/pl.py --dataset $D --template $TPLT --scale $SCLE
+        done
+    done
+done

@@ -30,7 +30,7 @@ device_name = args.device # [original instruct contrast]
 ML = 384
 
 
-model_dir = "/home/dsi/yxiao/plm/ckpt/merge"
+model_dir = "./ckpt/merge"
 print('###', device_name, '###')
 
 generator = pipeline(task='text-generation', model=f"{model_dir}/{template_name}-{dataset_name}-{scale_name}-{args.max_new_tokens}-{args.train_batch_size}",

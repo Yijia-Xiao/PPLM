@@ -1,6 +1,6 @@
 import json
 from template import PROMPT_DICT
-from datasets import load_dataset
+from datasets import load_dataset, load_from_disk
 
 
 class Generator(object):
@@ -8,7 +8,7 @@ class Generator(object):
 
         self.subset = subset
         dataset_hf = f'pii-{self.subset}'
-        self.ann = load_dataset(f'Yijia-Xiao/{dataset_hf}', split='train').to_list()
+        self.ann = load_from_disk(f'./data/{dataset_hf}.hf').to_list()
 
         num_train = int(0.85 * len(self.ann))
         self.ann = self.ann[num_train: ]

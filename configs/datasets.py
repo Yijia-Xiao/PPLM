@@ -3,7 +3,7 @@
 
 from dataclasses import dataclass
 
-    
+"""deprecate    
 @dataclass
 class samsum_dataset:
     dataset: str =  "samsum_dataset"
@@ -18,7 +18,7 @@ class grammar_dataset:
     train_split: str = "ft_datasets/grammar_dataset/gtrain_10k.csv" 
     test_split: str = "ft_datasets/grammar_dataset/grammar_validation.csv"
     input_length: int = 2048
-
+"""
     
 @dataclass
 class alpaca_dataset:

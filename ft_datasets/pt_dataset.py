@@ -11,7 +11,7 @@ import torch
 from sentencepiece import SentencePieceProcessor
 from torch.utils.data import Dataset
 from typing import List
-from datasets import load_dataset
+from datasets import load_dataset, load_from_disk
 from ft_datasets.template import PROMPT_DICT
 
 
@@ -22,7 +22,7 @@ class OriginalDataset(Dataset):
 
         self.output_flag = 'output' # 'cleaned_output' if dataset_config.cleaned else 'output'
         dataset_hf = f'pii-{subset}'
-        self.ann = load_dataset(f'Yijia-Xiao/{dataset_hf}', split='train').to_list()
+        self.ann = load_from_disk(f'./data/{dataset_hf}.hf').to_list()
 
         num_train = int(0.85 * len(self.ann))
         if partition == "train":
@@ -86,7 +86,7 @@ class QADataset(Dataset):
 
         self.output_flag = 'output' # 'cleaned_output' if dataset_config.cleaned else 'output'
         dataset_hf = f'pii-{subset}'
-        self.ann = load_dataset(f'Yijia-Xiao/{dataset_hf}', split='train').to_list()
+        self.ann = load_from_disk(f'./data/{dataset_hf}.hf').to_list()
 
         num_train = int(0.85 * len(self.ann))
         if partition == "train":
@@ -148,7 +148,7 @@ class RemoveDataset(Dataset):
 
         self.output_flag = 'cleaned_output'
         dataset_hf = f'pii-{subset}'
-        self.ann = load_dataset(f'Yijia-Xiao/{dataset_hf}', split='train').to_list()
+        self.ann = load_from_disk(f'./data/{dataset_hf}.hf').to_list()
 
         num_train = int(0.85 * len(self.ann))
         if partition == "train":
@@ -222,7 +222,7 @@ class MaskDataset(Dataset):
 
         self.output_flag = 'cleaned_output'
         dataset_hf = f'pii-{subset}'
-        self.ann = load_dataset(f'Yijia-Xiao/{dataset_hf}', split='train').to_list()
+        self.ann = load_from_disk(f'./data/{dataset_hf}.hf').to_list()
 
         num_train = int(0.85 * len(self.ann))
         if partition == "train":
@@ -304,7 +304,7 @@ class InstructDataset(Dataset):
         max_words = dataset_config.maxlen
 
         dataset_hf = f'pii-{subset}'
-        self.ann = load_dataset(f'Yijia-Xiao/{dataset_hf}', split='train').to_list()
+        self.ann = load_from_disk(f'./data/{dataset_hf}.hf').to_list()
 
         num_train = int(0.85 * len(self.ann))
         if partition == "train":
