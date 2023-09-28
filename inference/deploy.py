@@ -25,15 +25,10 @@ def main(tasks):
 
 if __name__ == "__main__":
     subsets = ['medical_flashcards', "wikidoc", "wikidoc_patient_information"]
-    strategies = ["command", "instruct", "contrast", "instruct_rev", "contrast_rev", "original", "mask", "remove"]
-    scales = ["7B", "13B"]
+    strategies = ['original', 'mask', 'remove', 'command'] # ["command", "instruct", "contrast", "instruct_rev", "contrast_rev", "original", "mask", "remove", "qa"]
+    scales = ["7B"] #, "13B"]
 
     # Generating the task list
-    tasks = [f"python eval.py --subset {subset} --strategy {strategy} --scale {scale}" for strategy in strategies for scale in scales for subset in subsets]
-    print(tasks)
-
-    main(tasks)
-
     tasks = [f"python eval.py --subset {subset} --strategy {strategy} --scale {scale}" for strategy in strategies for scale in scales for subset in subsets]
     print(tasks)
 

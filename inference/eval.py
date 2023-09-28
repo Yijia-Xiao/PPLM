@@ -36,15 +36,13 @@ pt_tokens = ["{{ORGANIZATION}}", "{{NAME}}", "{{EMAIL}}", "{{DATE_OF_BIRTH}}", "
 pattern = re.compile("|".join(map(re.escape, pt_tokens)))
 
 def single_string_replace(s):
-    return pattern.sub('<unk>', s)
+    for token in pt_tokens:
+        return s.replace(token, token[2: -2])
 
-# Applying the transformation using map function
 mapped_transformed_strings = list(map(single_string_replace, data_cleaned_labels))
-mapped_transformed_strings
+data_cleaned_labels = mapped_transformed_strings
 
 # print(data_cleaned_labels[: 10])
-# print(mapped_transformed_strings[: 10])
-data_cleaned_labels = mapped_transformed_strings
 
 # # Example of data_preds
 # data_preds = [
@@ -137,10 +135,39 @@ for orig_label, cleaned_label, prediction_dict in tqdm.tqdm(zip(data_orig_labels
             {'priv_pred_score': priv_pred_score}]
         )
 
-    elif strategy == 'original' or strategy == 'mask' or strategy == 'remove' or strategy == 'loss':
+    elif strategy == 'original' or strategy == 'mask' or strategy == 'remove' or strategy == 'loss' or strategy == 'command':
         # Extract the response part from predictions
-        prediction = prediction_dict[0]['generated_text'].split("### Response:\n")[1].strip()
+        prediction = prediction_dict[0]['generated_text'].split("### Response:")[1].strip()
 
+        orig_scores = text_scorer.calculate_scores(prediction, orig_label)
+        cleaned_scores = text_scorer.calculate_scores(prediction, cleaned_label)
+        priv_score = score = pii_scorer.score_text(prediction)
+
+        results.append(
+            [{'plain_orig': orig_scores},
+            {'plain_cleaned': cleaned_scores},
+            {'priv_score': priv_score}]
+        )
+    elif strategy == 'qa':
+        # Extract the response part from predictions
+        prediction = prediction_dict[0]['generated_text'].split("### Answer:")[1].strip()
+
+        orig_scores = text_scorer.calculate_scores(prediction, orig_label)
+        cleaned_scores = text_scorer.calculate_scores(prediction, cleaned_label)
+        priv_score = score = pii_scorer.score_text(prediction)
+
+        results.append(
+            [{'plain_orig': orig_scores},
+            {'plain_cleaned': cleaned_scores},
+            {'priv_score': priv_score}]
+        )
+    elif strategy == 'dpo':
+        # Extract the response part from predictions
+        # print(prediction_dict[0]['generated_text'])
+        # print(prediction_dict[0]['generated_text'])
+        # print(prediction_dict[0]['generated_text'].split("Answer:")[1:])
+        prediction = ' '.join(prediction_dict[0]['generated_text'].split("Answer:")[1: ]).strip()
+        # print(prediction)
         orig_scores = text_scorer.calculate_scores(prediction, orig_label)
         cleaned_scores = text_scorer.calculate_scores(prediction, cleaned_label)
         priv_score = score = pii_scorer.score_text(prediction)

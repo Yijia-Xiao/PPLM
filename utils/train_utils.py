@@ -144,6 +144,7 @@ def train(model, train_dataloader,eval_dataloader, tokenizer, optimizer, lr_sche
         # Update the learning rate as needed
         lr_scheduler.step()
           
+        model.save_pretrained(train_config.output_dir + f"/epoch_{epoch}")
         if train_config.run_validation:
             eval_ppl, eval_epoch_loss = evaluation(model, train_config, eval_dataloader, local_rank, tokenizer)
             checkpoint_start_time = time.perf_counter()

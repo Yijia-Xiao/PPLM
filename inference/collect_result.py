@@ -29,12 +29,14 @@ def analyze(data):
     if 'protect_orig' in results:
         for k, v in results.items():
             if k == 'protect_orig' or k == 'protect_cleaned':
+                # if k == 'plain_orig':
                 if k == 'protect_orig':
                     res['orig'] = v
                 else:
                     res['cleaned'] = v
             else:
                 if k == 'priv_protected_score':
+                # if k == 'priv_plain_score':
                     res['priv_score'] = v
 
     else:
@@ -49,13 +51,34 @@ def analyze(data):
                     res['priv_score'] = v
 
     print(res)
+    return res
 
 
+
+data_curve = []
+
+for subset in ["wikidoc_patient_information"]:
+    for scale in ['7B']:
+        # for stgy in ['mask']: # ['mask']: # ["original", "mask", "remove", "qa", "command", "instruct", "contrast", "instruct_rev", "contrast_rev"]: # ["dpo"]:
+        for stgy in ['contrast_rev']: # ['mask']: # ["original", "mask", "remove", "qa", "command", "instruct", "contrast", "instruct_rev", "contrast_rev"]: # ["dpo"]:
+            for ep in range(30):
+                f = f"./examples/results/plot/{subset}-{stgy}-{scale}-{ep}.json"
+                data = json.load(open(f, 'r'))
+                print(f'{ep}')
+                res = analyze(data)
+                data_curve.append(res)
+            print()
+
+print(len(data_curve))
+
+json.dump(data_curve, open(f'contrast_rev.json', 'w'))
+
+exit(0)
 
 # files = "medical_flashcards-contrast-res.json  medical_flashcards-mask-res.json      wikidoc-contrast-res.json  wikidoc-mask-res.json  medical_flashcards-instruct-res.json  medical_flashcards-original-res.json  wikidoc-instruct-res.json  wikidoc-original-res.json"
 for subset in ["medical_flashcards", "wikidoc", "wikidoc_patient_information"]:
     for scale in ['7B', '13B']:
-        for stgy in ["original", "mask", "remove", "command", "instruct", "contrast", "instruct_rev", "contrast_rev"]:
+        for stgy in ['command', 'dpo']: # ["original", "mask", "remove", "qa", "command", "instruct", "contrast", "instruct_rev", "contrast_rev"]: # ["dpo"]:
             f = f"./examples/results/{subset}-{stgy}-{scale}.json"
             data = json.load(open(f, 'r'))
             print(f'SUBSET={subset}. STRATEGY={stgy}. SCALE={scale}.')
