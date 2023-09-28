@@ -10,10 +10,6 @@ ML=384
 
 for SUBSET in wikidoc_patient_information medical_flashcards wikidoc;
 do
-    if [ "$SUBSET" = "cord19" ]; then
-        EP=3
-    fi
-
     for STGY in contrast instruct;
     do
         TASK=instruct
@@ -33,10 +29,6 @@ done
 
 for SUBSET in wikidoc_patient_information medical_flashcards wikidoc;
 do
-    if [ "$SUBSET" = "cord19" ]; then
-        EP=3
-    fi
-
     for TASK in original mask;
     do
         LOCA=$TASK-$SUBSET-$SIZE-$ML-$BS
@@ -52,10 +44,9 @@ do
         python inference/hf-text-generation-inference/merge_lora_weights.py --base_model models_hf/7B --peft_model ckpt/$LOCA/ --output_dir ckpt/merge/$LOCA/
     done
 done
-experiment_1
 
 
-for SUBSET in medical_flashcards; # wikidoc;
+for SUBSET in wikidoc_patient_information medical_flashcards wikidoc;
 do
     for TASK in remove;
     do
@@ -74,7 +65,7 @@ do
 done
 
 
-<< loss
+<< loss script
 for SUBSET in medical_flashcards wikidoc;
 do
     for TASK in loss;
@@ -95,10 +86,11 @@ done
 loss
 
 
-set -x
+# inference script
+<< inference
 for D in "$@";
 do
-    for TPLT in command instruct contrast instruct_rev contrast_rev; # dpo; # qa; # original mask remove command instruct contrast instruct_rev contrast_rev;
+    for TPLT in original mask remove qa command instruct contrast instruct_rev contrast_rev;
     do
         for SCLE in 7B 13B;
         do
@@ -106,3 +98,4 @@ do
         done
     done
 done
+inference

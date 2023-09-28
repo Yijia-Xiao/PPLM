@@ -1,0 +1,50 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "pii-medical_flashcards",
+  "dataset_size": 28620193,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/PPLM-anonymous/pii-medical_flashcards@6212e39579855ba42f28d8506f7dd1fe1965ce9c/data/train-00000-of-00001-f9ea74133d716c0b.parquet": {
+      "num_bytes": 12411702,
+      "checksum": null
+    }
+  },
+  "download_size": 12411702,
+  "features": {
+    "input": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "output": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "instruction": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "cleaned_output": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 41031895,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 28620193,
+      "num_examples": 33955,
+      "dataset_name": "pii-medical_flashcards"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "pii-wikidoc",
+  "dataset_size": 19486545,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/PPLM-anonymous/pii-wikidoc@35c9d38ba53ad7d495ad59de97b451a3be5b9ae0/data/train-00000-of-00001-974291b2df728e2b.parquet": {
+      "num_bytes": 10662804,
+      "checksum": null
+    }
+  },
+  "download_size": 10662804,
+  "features": {
+    "output": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "input": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "instruction": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "cleaned_output": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 30149349,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 19486545,
+      "num_examples": 10000,
+      "dataset_name": "pii-wikidoc"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}
