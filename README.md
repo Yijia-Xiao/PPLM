@@ -86,6 +86,16 @@ python inference/hf-text-generation-inference/merge_lora_weights.py --base_model
 
 ## Evaluation
 
+### Genrarte evaluation samples
+
+Run `ft_datasets/example_sampler.py` script. Pass `subset` parameter to `Generator` to initialize; then pass `task` argument to `generate()` function to generate dataset (datafileds filling into templeates, ready for feeding into model for inference) and save as `JSON` file. 
+
+Example:
+```
+generator = Generator(subset='medical_flashcards')
+generator.generate(task='original')
+```
+
 ### Inference Pipeline
 
 Please utilize the [inference/pl.py](./inference/pl.py) script for the inference pipeline.

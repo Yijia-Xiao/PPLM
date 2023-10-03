@@ -56,9 +56,8 @@ def analyze(data):
 
 data_curve = []
 for subset in ["wikidoc_patient_information"]:
-    for scale in ['7B']:
-        # for stgy in ['mask']: # ['mask']: # ["original", "mask", "remove", "qa", "command", "instruct", "contrast", "instruct_rev", "contrast_rev"]: # ["dpo"]:
-        for stgy in ['contrast_rev']: # ['mask']: # ["original", "mask", "remove", "qa", "command", "instruct", "contrast", "instruct_rev", "contrast_rev"]: # ["dpo"]:
+    for scale in ['7B', '13B']:
+        for stgy in ["original", "mask", "remove", "qa", "command", "instruct", "contrast", "instruct_rev", "contrast_rev"]:
             for ep in range(30):
                 f = f"./examples/results/plot/{subset}-{stgy}-{scale}-{ep}.json"
                 data = json.load(open(f, 'r'))
@@ -73,7 +72,7 @@ json.dump(data_curve, open(f'contrast_rev.json', 'w'))
 
 for subset in ["medical_flashcards", "wikidoc", "wikidoc_patient_information"]:
     for scale in ['7B', '13B']:
-        for stgy in ['command', 'dpo']: # ["original", "mask", "remove", "qa", "command", "instruct", "contrast", "instruct_rev", "contrast_rev"]: # ["dpo"]:
+        for stgy in ["original", "mask", "remove", "qa", "command", "instruct", "contrast", "instruct_rev", "contrast_rev"]:
             f = f"./examples/results/{subset}-{stgy}-{scale}.json"
             data = json.load(open(f, 'r'))
             print(f'SUBSET={subset}. STRATEGY={stgy}. SCALE={scale}.')
