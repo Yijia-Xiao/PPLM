@@ -114,3 +114,16 @@ Usage:
 ```bash
 python inference/eval.py --subset [medical_flashcards, wikidoc, wikidoc_patient_information] --strategy [original, remove, loss, instruct, etc.] --scale [7B, 13B]
 ```
+
+## Citation
+If you find our repository helpful or used it, please cite our [paper](https://arxiv.org/abs/2310.02469).
+```
+@misc{xiao2023large,
+      title={Large Language Models Can Be Good Privacy Protection Learners}, 
+      author={Yijia Xiao and Yiqiao Jin and Yushi Bai and Yue Wu and Xianjun Yang and Xiao Luo and Wenchao Yu and Xujiang Zhao and Yanchi Liu and Haifeng Chen and Wei Wang and Wei Cheng},
+      year={2023},
+      eprint={2310.02469},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+```
